@@ -1,3 +1,5 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
@@ -8,7 +10,9 @@ origins = [
     "*",
 ]
 
-app = FastAPI()
+base_url = os.environ.get("BASE_URL", "http://localhost:8000")
+
+app = FastAPI(servers=[{"url": base_url}])
 
 app.include_router(students.router)
 
