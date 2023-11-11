@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=StudentSchema,
+@router.post("", response_model=StudentSchema,
              summary="Create a student",
              description="Create a student with basic information, without dependencies",
              operation_id="create_student"
@@ -40,7 +40,8 @@ def read_student(student_id: str, db: Session = Depends(get_db)):
 @router.delete("/{student_id}",
                summary="Delete student",
                description="Deletes a student with all dependencies",
-               operation_id="delete_student")
+               operation_id="delete_student",
+               )
 def delete_student(student_id: str, db: Session = Depends(get_db)):
     if not remove_student(db, student_id=student_id):
         raise HTTPException(status_code=404, detail="Student not found")
@@ -49,29 +50,29 @@ def delete_student(student_id: str, db: Session = Depends(get_db)):
 
 # Endpoint to add interests to a student
 @router.post("/{student_id}/interests", response_model=StudentSchema, summary="Create student's interests",
-             description="Create interests for a student identified by student_id",
+             description="Create an interest for a student identified by student_id",
              operation_id="create_student_interests")
-def create_student_interests(student_id: str, interests: List[InterestBaseSchema], db: Session = Depends(get_db)):
-    add_student_interests(db, student_id, interests)
+def create_student_interests(student_id: str, interest: InterestBaseSchema, db: Session = Depends(get_db)):
+    add_student_interests(db, student_id, [interest])
     db_student = get_student_by_id(db, student_id=student_id)
     return db_student
 
 
 # Endpoint to add pets to a student
 @router.post("/{student_id}/pets", response_model=StudentSchema, summary="Create student's pets",
-             description="Create pets for a student identified by student_id",
+             description="Create pet for a student identified by student_id",
              operation_id="create_student_pets")
-def create_student_pets(student_id: str, pets: List[PetBaseSchema], db: Session = Depends(get_db)):
-    add_student_pets(db, student_id, pets)
+def create_student_pets(student_id: str, pets: PetBaseSchema, db: Session = Depends(get_db)):
+    add_student_pets(db, student_id, [pets])
     db_student = get_student_by_id(db, student_id=student_id)
     return db_student
 
 
 # Endpoint to add lessons to a student
 @router.post("/{student_id}/lessons", response_model=StudentSchema, summary="Create student's lessons",
-             description="Create lessons for a student identified by student_id",
+             description="Create a lessons for a student identified by student_id",
              operation_id="create_student_lessons")
-def create_student_lessons(student_id: str, lessons: List[LessonBaseSchema], db: Session = Depends(get_db)):
-    add_student_lessons(db, student_id, lessons)
+def create_student_lessons(student_id: str, lessons: LessonBaseSchema, db: Session = Depends(get_db)):
+    add_student_lessons(db, student_id, [lessons])
     db_student = get_student_by_id(db, student_id=student_id)
     return db_student

@@ -12,7 +12,7 @@ origins = [
 
 base_url = os.environ.get("BASE_URL", "http://localhost:8000")
 
-app = FastAPI(servers=[{"url": base_url}])
+app = FastAPI(servers=[{"url": base_url}], title="AiKiddo API", version="0.0.1", description="API for AiKiddo")
 
 app.include_router(students.router)
 
